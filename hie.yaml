@@ -1,0 +1,7 @@
+cradle:
+  cabal:
+    - path: "app/Main.hs"
+      component: "my-project:exe:my-project"
+
+    - path: "app/Src/KVS.hs"
+      component: "my-project:exe:my-project"
