@@ -44,7 +44,10 @@ executable my-project
                         TupleSections
 
     build-depends: base
-                 , turtle
+                 , aeson
+                 , optparse-generic
+                 , servant
+                 , servant-server
                  , polysemy
                  , polysemy-plugin
     hs-source-dirs:   app
