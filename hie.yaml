@@ -3,5 +3,14 @@ cradle:
     - path: "app/Main.hs"
       component: "my-project:exe:my-project"
 
-    - path: "app/Src/KVS.hs"
+    - path: "app/Src/Store.hs"
+      component: "my-project:exe:my-project"
+
+    - path: "app/Src/Logging.hs"
+      component: "my-project:exe:my-project"
+
+    - path: "app/Src/Servant.hs"
+      component: "my-project:exe:my-project"
+
+    - path: "app/Src/Config.hs"
       component: "my-project:exe:my-project"

@@ -1,5 +1,6 @@
-{ mkDerivation, aeson, base, lib, optparse-generic, polysemy
-, polysemy-plugin, servant, servant-server
+{ mkDerivation, aeson, base, containers, lib, monad-logger, mtl
+, optparse-generic, polysemy, polysemy-plugin, servant
+, servant-server, text, warp
 }:
 mkDerivation {
   pname = "my-project";
@@ -8,8 +9,8 @@ mkDerivation {
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    aeson base optparse-generic polysemy polysemy-plugin servant
-    servant-server
+    aeson base containers monad-logger mtl optparse-generic polysemy
+    polysemy-plugin servant servant-server text warp
   ];
   license = lib.licenses.wtfpl;
 }

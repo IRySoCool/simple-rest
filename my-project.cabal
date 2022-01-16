@@ -35,15 +35,37 @@ executable my-project
 
     -- Modules included in this executable, other than Main.
     other-modules:
-        Src.KVS
+        Src.Store
+        Src.Logging
+        Src.Servant
+        Src.Config
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
 
+    ghc-options: -fplugin=Polysemy.Plugin
+
     default-extensions: TypeApplications
                         TupleSections
+                        LambdaCase
+                        GADTs
+                        PolyKinds
+                        TemplateHaskell
+                        TypeOperators
+                        DataKinds
+                        FlexibleContexts
+                        ScopedTypeVariables
+                        DeriveAnyClass
+                        DeriveGeneric
+                        OverloadedStrings
+                        StandaloneDeriving
 
     build-depends: base
+                 , mtl
+                 , warp
+                 , text
+                 , containers
+                 , monad-logger
                  , aeson
                  , optparse-generic
                  , servant
