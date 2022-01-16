@@ -72,5 +72,8 @@ executable my-project
                  , servant-server
                  , polysemy
                  , polysemy-plugin
+                 , persistent
+                 , persistent-postgresql
+                 
     hs-source-dirs:   app
     default-language: Haskell2010
