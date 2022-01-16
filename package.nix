@@ -1,17 +1,18 @@
-{ mkDerivation, aeson, base, containers, lib, monad-logger, mtl
-, optparse-generic, persistent, persistent-postgresql, polysemy
-, polysemy-plugin, servant, servant-server, text, warp
+{ mkDerivation, aeson, base, bytestring, containers, hasql
+, hasql-pool, hasql-th, lib, monad-logger, mtl, optparse-generic
+, polysemy, polysemy-plugin, profunctors, servant, servant-server
+, text, time, tuple, vector, warp
 }:
 mkDerivation {
-  pname = "my-project";
+  pname = "simple-rest";
   version = "0.1.0.0";
   src = ./.;
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [
-    aeson base containers monad-logger mtl optparse-generic persistent
-    persistent-postgresql polysemy polysemy-plugin servant
-    servant-server text warp
+    aeson base bytestring containers hasql hasql-pool hasql-th
+    monad-logger mtl optparse-generic polysemy polysemy-plugin
+    profunctors servant servant-server text time tuple vector warp
   ];
   license = lib.licenses.wtfpl;
 }

@@ -2,10 +2,10 @@
 
 module Src.Config where
 
-import Options.Generic
+import           Options.Generic
 
 data Config w = Config
-    { port :: w ::: Int <!> "8080" <?> "Port number for the app" 
+    { port :: w ::: Int <!> "8080" <?> "Port number for the app"
     , foo  :: w ::: String <!> "bar" <?> "This field is useless"
     } deriving (Generic)
 

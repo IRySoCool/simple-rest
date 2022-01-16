@@ -1,16 +1,25 @@
 cradle:
   cabal:
     - path: "app/Main.hs"
-      component: "my-project:exe:my-project"
+      component: "simple-rest:exe:my-project"
 
     - path: "app/Src/Store.hs"
-      component: "my-project:exe:my-project"
+      component: "simple-rest:exe:my-project"
 
     - path: "app/Src/Logging.hs"
-      component: "my-project:exe:my-project"
+      component: "simple-rest:exe:my-project"
 
     - path: "app/Src/Servant.hs"
-      component: "my-project:exe:my-project"
+      component: "simple-rest:exe:my-project"
 
     - path: "app/Src/Config.hs"
-      component: "my-project:exe:my-project"
+      component: "simple-rest:exe:my-project"
+
+    - path: "app/Src/DB.hs"
+      component: "simple-rest:exe:my-project"
+
+    - path: "app/Src/Session.hs"
+      component: "simple-rest:exe:my-project"
+
+    - path: "app/Src/Entity/Book.hs"
+      component: "simple-rest:exe:my-project"

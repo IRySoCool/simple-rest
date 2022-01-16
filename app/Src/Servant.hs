@@ -1,75 +1,69 @@
 module Src.Servant (app) where
 
 import           Control.Monad.Except
-import           Data.Aeson
 import           Data.Function
-import           Data.IORef
+import           Data.Int
 import qualified Data.Map.Strict          as M
-import           GHC.Generics
+import           Data.Time.Clock
+import           Data.Vector
+import           Hasql.Connection         (settings)
+import           Hasql.Pool
 import qualified Network.Wai.Handler.Warp as Warp
 import           Options.Generic
 import           Polysemy
-import           Polysemy.State
 import           Servant
 import           Src.Config
+import           Src.DB
+import           Src.Entity.Book
 import           Src.Logging
-import           Src.Store
+import qualified Src.Session              as S
 
-data Book = Book
-  { id     :: Int
-  , name   :: String
-  , author :: String
-  }
-  deriving (Show, Generic, FromJSON, ToJSON)
-
-type BookStore = Store Int Book
-
-initBookStore :: M.Map Int Book
-initBookStore = M.empty
-
-type API = "books" :> Get '[JSON] [Book]
-      :<|> "book"  :> Capture "bookid" Int :> Get '[JSON] (Maybe Book)
+type API = "books" :> Get '[JSON] (Vector Book)
+      :<|> "book"  :> Capture "bookid" Int64 :> Get '[JSON] (Maybe Book)
       :<|> "book"  :> ReqBody '[JSON] Book :> Post '[JSON] Bool
+      :<|> "book"  :> Capture "bookid" Int64 :> Delete '[JSON] Bool
 
-apiServer :: Members '[Logging, BookStore] r => ServerT API (Sem r)
-apiServer = list :<|> get :<|> post
+apiServer :: Members '[Logging, DB] r => ServerT API (Sem r)
+apiServer = list :<|> get :<|> post :<|> delete
   where
-    get :: Members '[Logging, BookStore] r => Int -> Sem r (Maybe Book)
+    get :: Members '[Logging, DB] r => Int64 -> Sem r (Maybe Book)
     get bookId = do
       logInfo "Getting book API is called."
-      getItem bookId
+      runSession $ S.getBook bookId
 
-    list :: Members '[Logging, BookStore] r => Sem r [Book]
+    list :: Members '[Logging, DB] r => Sem r (Vector Book)
     list = do
       logInfo "Listing book API is called."
-      (fmap . fmap) snd listItem
+      runSession S.listBook
 
-    post :: Members '[Logging, BookStore] r => Book -> Sem r Bool
-    post book@(Book bookId _ _) = do
+    post :: Members '[Logging, DB] r => Book -> Sem r Bool
+    post book = do
       logInfo "Inserting a book into bookstore"
-      insertItem bookId book
-      return True
+      runSession $ S.insertBook book
+      pure True
+
+    delete :: Members '[Logging, DB] r => Int64 -> Sem r Bool
+    delete bookId = do
+      logInfo "Deleting a book from bookstore"
+      runSession $ S.deleteBook bookId
+      pure True
 
 api :: Proxy API
 api = Proxy
 
-initialize :: IO Application
-initialize = do
-  ref <- newIORef initBookStore
-  pure . serve api . hoistServer api (interpreter ref) $ apiServer
- where
-  interpreter ref sem = sem
-    & runLoggingIO
-    & runActionState
-    & runStateIORef @(M.Map Int Book) ref
-    & runM
-    & fmap (handleErrors . Right)
-    & Handler . ExceptT
-
-  handleErrors (Left  _    ) = Left err404 { errBody = "Some error occur" }
-  handleErrors (Right value) = Right value
-
 app :: IO ()
 app = do
   (Config port _) <- unwrapRecord "Application"
-  initialize >>= Warp.run port
+  pool <- acquire (100, 10 :: NominalDiffTime, settings "localhost" 5432 "test" "test" "test")
+  putStrLn "Starting server..."
+  Warp.run port . serve api . hoistServer api (interpreter pool) $ apiServer
+  where
+    interpreter pool sem = sem
+      & runLoggingIO
+      & runDBIO pool
+      & runM
+      & fmap (handleErrors . Right)
+      & Handler . ExceptT
+
+    handleErrors (Left  _    ) = Left err404 { errBody = "Some error occur" }
+    handleErrors (Right value) = Right value
