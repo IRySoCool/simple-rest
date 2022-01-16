@@ -7,7 +7,6 @@ import           Data.Profunctor
 import           Data.Tuple.Curry
 import           Data.Vector
 import           Hasql.Session
-import           Hasql.Statement
 import           Hasql.TH
 import           Src.Entity.Book
 

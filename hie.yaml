@@ -3,9 +3,6 @@ cradle:
     - path: "app/Main.hs"
       component: "simple-rest:exe:my-project"
 
-    - path: "app/Src/Store.hs"
-      component: "simple-rest:exe:my-project"
-
     - path: "app/Src/Logging.hs"
       component: "simple-rest:exe:my-project"
 
