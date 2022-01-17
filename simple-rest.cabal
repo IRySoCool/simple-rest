@@ -17,9 +17,7 @@ executable my-project
         Src.Logging
         Src.Servant
         Src.Config
-        Src.DB
-        Src.Session
-        Src.Entity.Book
+        Src.Persistent
 
     -- LANGUAGE extensions used by modules in this package.
     -- other-extensions:
@@ -57,10 +55,10 @@ executable my-project
                  , servant-server
                  , polysemy
                  , polysemy-plugin
-                 , hasql
-                 , hasql-pool
-                 , hasql-th
-                 , tuple
+                 , persistent
+                 , persistent-postgresql
+                 , persistent-template
+                 , resource-pool
                  
     hs-source-dirs:   app
     default-language: Haskell2010

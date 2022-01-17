@@ -12,11 +12,5 @@ cradle:
     - path: "app/Src/Config.hs"
       component: "simple-rest:exe:my-project"
 
-    - path: "app/Src/DB.hs"
-      component: "simple-rest:exe:my-project"
-
-    - path: "app/Src/Session.hs"
-      component: "simple-rest:exe:my-project"
-
-    - path: "app/Src/Entity/Book.hs"
+    - path: "app/Src/Persistent.hs"
       component: "simple-rest:exe:my-project"
