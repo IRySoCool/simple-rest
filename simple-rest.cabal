@@ -10,7 +10,7 @@ license-file:       LICENSE
 
 extra-source-files: CHANGELOG.md
 
-executable my-project
+executable simple-rest
     main-is:          Main.hs
 
     other-modules:
